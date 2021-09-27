@@ -21,19 +21,19 @@ def generate_client_time(alpha):
 def estimate_two_slots(alpha, len):
     estimation = [0] * len
     for _ in range(iterations_number):
-        estimation = [sum(x) for x in zip(estimation, sorted(generate_queue(1/alpha, len)))]
+        estimation = [sum(x) for x in zip(estimation, sorted(generate_queue(alpha, len)))]
     estimation[:] = [x / iterations_number for x in estimation]
     return estimation
 
 
 def conduct_experiment(number_of_slots, alpha, queue_len):
-    queue = generate_queue(1/alpha, number_of_slots)
+    queue = generate_queue(alpha, number_of_slots)
     heapq.heapify(queue)
     wait_time = [0] * number_of_slots
     for _ in range(number_of_slots, queue_len):
         cur_time = heapq.heappop(queue)
         wait_time.append(cur_time)
-        heapq.heappush(queue, generate_client_time(1/alpha) + cur_time)
+        heapq.heappush(queue, generate_client_time(alpha) + cur_time)
     return wait_time
 
 
